@@ -1,5 +1,7 @@
 package edu.westga.cs3152.model;
 
+import java.io.IOException;
+
 /**
  * Class CNF
  * 
@@ -12,7 +14,9 @@ package edu.westga.cs3152.model;
  * @version Fall 2021
  */
 public class CNF {
-
+	int[][] literals;
+	int[][] clauses;
+	
 	/**
 	 * Instantiates a new CNF object and sets it to the CNF formula specified in the
 	 * given file. The file conforms to the simplified DIMACS format: (Adapted from
@@ -42,6 +46,13 @@ public class CNF {
 	 *                                  format
 	 */
 	public CNF(String filename) {
+		try {
+			Tuple<int[][], int[][]> matrices = DimacParser.parseCnf(filename);
+			this.literals = matrices.getFirst();
+			this.clauses = matrices.getSecond();
+		} catch (IOException exception) {
+			throw new IllegalArgumentException(exception.getMessage());
+		}
 	}
 
 	/**
@@ -121,4 +132,5 @@ public class CNF {
 	public int unset(int var) {
 		return 0;
 	}
+	
 }
