@@ -15,7 +15,9 @@ import java.io.IOException;
  */
 public class CNF {
 	private DimacParser parser;
-	private boolean isFormulaTrue;
+	private int isFormulaTrue;
+	private int[] variables;
+	
 	/**
 	 * Instantiates a new CNF object and sets it to the CNF formula specified in the
 	 * given file. The file conforms to the simplified DIMACS format: (Adapted from
@@ -48,6 +50,8 @@ public class CNF {
 		try {
 			this.parser = new DimacParser();
 			this.parser.parseCnf(filename);
+			this.variables = new int[this.parser.getVariables()];
+			this.isFormulaTrue = this.isFormulaTrue();
 		} catch (IOException exception) {
 			throw new IllegalArgumentException(exception.getMessage());
 		}
@@ -85,7 +89,7 @@ public class CNF {
 	 * @return the current value of this formula
 	 */
 	public int getValue() {
-		return 0;
+		return this.isFormulaTrue;
 	}
 
 	/**
@@ -97,8 +101,11 @@ public class CNF {
 	 * @return the value of this variable
 	 */
 	public int getValue(int var) {
-		
-		return 0;
+		int varOffset = var - 1;
+		if (varOffset > this.variables.length - 1 && varOffset < 0) {
+			return 0;
+		}
+		return this.variables[varOffset];
 	}
 
 	/**
@@ -115,7 +122,23 @@ public class CNF {
 	 * @throws IllegalArgumentException if the precondition is not met
 	 */
 	public int set(int var, int val) {
-		return 0;
+		int varOffset = var - 1;
+		if (varOffset < 0 || varOffset > this.parser.getVariables() - 1) {
+			throw new IllegalArgumentException("Variable out of bounds");
+		}
+		if (val != -1 && val != 1) {
+			throw new IllegalArgumentException("Value not -1 or 1");
+		}
+		if (this.getValue(var) != 0) {
+			throw new IllegalArgumentException("Variable is already set");
+		}
+		for (int index = 0; index < this.variables.length; index++) {
+			if (index == varOffset) {
+				this.variables[index] = val;
+			}
+		}
+		this.isFormulaTrue = this.isFormulaTrue();
+		return this.isFormulaTrue;
 	}
 
 	/**
@@ -129,11 +152,42 @@ public class CNF {
 	 * @throws IllegalArgumentException if the precondition is not met
 	 */
 	public int unset(int var) {
-		return 0;
+		int varOffset = var - 1;
+		if (varOffset < 0 || varOffset > this.parser.getVariables() - 1) {
+			throw new IllegalArgumentException("Variable out of bounds");
+		}
+		if (this.getValue(var) == 0) {
+			throw new IllegalArgumentException("Variable has not been set");
+		}
+		for (int index = 0; index < this.variables.length; index++) {
+			if (index == varOffset) {
+				this.variables[index] = 0;
+			}
+		}
+		this.isFormulaTrue = this.isFormulaTrue();
+		return this.isFormulaTrue;
 	}
 	
-	private boolean isFormulaTrue() {
-		return false;
+	private int isFormulaTrue() {
+		int[][] clauses = this.parser.getClauseInstances();
+		int[] clauseEvaluation = new int[this.parser.getClauses()];
+		for (int var = 0; var < clauses.length; var++) {
+			for (int clause = 0; clause < clauses[var].length; clause++) {
+				int clauseValue = clauses[var][clause];
+				int valueOfVar = this.variables[var];
+				clauseEvaluation[clause] = (valueOfVar * clauseValue);
+			}
+		}
+		int trueOrCantBeDetermined = 1;
+		for (int clause = 0; clause < clauseEvaluation.length; clause++) {
+			if (clauseEvaluation[clause] < 0) {
+				return -1;
+			}
+			if (clauseEvaluation[clause] == 0) {
+				trueOrCantBeDetermined = 0;
+			}
+		}
+		return trueOrCantBeDetermined;
 	}
 	
 }

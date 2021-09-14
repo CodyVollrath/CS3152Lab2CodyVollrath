@@ -16,8 +16,6 @@ class TestParser {
 		try {
 			var parser = new DimacParser();
 			parser.parseCnf(fileLocation);
-			System.out.println(parser.getLiterals());
-			System.out.println(parser.getVariables());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -37,8 +35,6 @@ class TestParser {
 		try {
 			var parser = new DimacParser();
 			parser.parseCnf(fileLocation);
-			System.out.println(parser.getLiterals());
-			System.out.println(parser.getVariables());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -50,8 +46,6 @@ class TestParser {
 		try {
 			var parser = new DimacParser();
 			parser.parseCnf(fileLocation);
-			System.out.println(parser.getLiterals());
-			System.out.println(parser.getVariables());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
