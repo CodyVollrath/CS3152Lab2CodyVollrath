@@ -24,7 +24,7 @@ class TestSet {
 	}
 	
 	@Test
-	void testSetAlreadSetVariable() {
+	void testSetAlreadySetVariable() {
 		CNF formula = new CNF("Input/small2.cnf");
 		formula.set(2, 1);
 		assertThrows(IllegalArgumentException.class, () -> formula.set(2, 1));

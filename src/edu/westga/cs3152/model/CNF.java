@@ -14,8 +14,8 @@ import java.io.IOException;
  * @version Fall 2021
  */
 public class CNF {
-	DimacParser parser;
-	
+	private DimacParser parser;
+	private boolean isFormulaTrue;
 	/**
 	 * Instantiates a new CNF object and sets it to the CNF formula specified in the
 	 * given file. The file conforms to the simplified DIMACS format: (Adapted from
@@ -85,19 +85,6 @@ public class CNF {
 	 * @return the current value of this formula
 	 */
 	public int getValue() {
-		int[][] literals = this.parser.getLiterals();
-		for (int row = 0; row < literals.length; row++) {
-			boolean isTrue = false;
-			for (int col = 0; col < literals[row].length; col++) {
-				if (literals[row][col] > 0) {
-					isTrue = true;
-					break;
-				}
-			}
-			if (!isTrue) {
-				return -1;
-			}
-		}
 		return 0;
 	}
 
@@ -110,6 +97,7 @@ public class CNF {
 	 * @return the value of this variable
 	 */
 	public int getValue(int var) {
+		
 		return 0;
 	}
 
@@ -142,6 +130,10 @@ public class CNF {
 	 */
 	public int unset(int var) {
 		return 0;
+	}
+	
+	private boolean isFormulaTrue() {
+		return false;
 	}
 	
 }
