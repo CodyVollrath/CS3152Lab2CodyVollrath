@@ -14,8 +14,10 @@ class TestParser {
 	void testFirstValid() {
 		String fileLocation = "Input/small1.cnf";
 		try {
-			var data = DimacParser.parseCnf(fileLocation);
-			System.out.println(data.getFirst());
+			var parser = new DimacParser();
+			parser.parseCnf(fileLocation);
+			System.out.println(parser.getLiterals());
+			System.out.println(parser.getVariables());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -25,7 +27,7 @@ class TestParser {
 	void testInvalid() {
 		String fileLocation = "Input/invalid.cnf";
 		assertThrows(IllegalArgumentException.class, () -> {
-			var data = DimacParser.parseCnf(fileLocation);
+			new DimacParser().parseCnf(fileLocation);
 		});
 	}
 	
@@ -33,8 +35,10 @@ class TestParser {
 	void testSecondValid() {
 		String fileLocation = "Input/small2.cnf";
 		try {
-			var data = DimacParser.parseCnf(fileLocation);
-			System.out.println(data.getFirst());
+			var parser = new DimacParser();
+			parser.parseCnf(fileLocation);
+			System.out.println(parser.getLiterals());
+			System.out.println(parser.getVariables());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -44,8 +48,10 @@ class TestParser {
 	void testThirdValid() {
 		String fileLocation = "Input/small3.cnf";
 		try {
-			var data = DimacParser.parseCnf(fileLocation);
-			System.out.println(data.getFirst());
+			var parser = new DimacParser();
+			parser.parseCnf(fileLocation);
+			System.out.println(parser.getLiterals());
+			System.out.println(parser.getVariables());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

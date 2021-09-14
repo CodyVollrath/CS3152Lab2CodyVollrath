@@ -14,8 +14,7 @@ import java.io.IOException;
  * @version Fall 2021
  */
 public class CNF {
-	int[][] literals;
-	int[][] clauses;
+	DimacParser parser;
 	
 	/**
 	 * Instantiates a new CNF object and sets it to the CNF formula specified in the
@@ -47,9 +46,8 @@ public class CNF {
 	 */
 	public CNF(String filename) {
 		try {
-			Tuple<int[][], int[][]> matrices = DimacParser.parseCnf(filename);
-			this.literals = matrices.getFirst();
-			this.clauses = matrices.getSecond();
+			this.parser = new DimacParser();
+			this.parser.parseCnf(filename);
 		} catch (IOException exception) {
 			throw new IllegalArgumentException(exception.getMessage());
 		}
@@ -63,7 +61,7 @@ public class CNF {
 	 * @return number variables
 	 */
 	public int numberVariables() {
-		return 0;
+		return this.parser.getVariables();
 	}
 
 	/**
@@ -74,7 +72,7 @@ public class CNF {
 	 * @return number clauses
 	 */
 	public int numberClauses() {
-		return 0;
+		return this.parser.getClauses();
 	}
 
 	/**
@@ -87,6 +85,19 @@ public class CNF {
 	 * @return the current value of this formula
 	 */
 	public int getValue() {
+		int[][] literals = this.parser.getLiterals();
+		for (int row = 0; row < literals.length; row++) {
+			boolean isTrue = false;
+			for (int col = 0; col < literals[row].length; col++) {
+				if (literals[row][col] > 0) {
+					isTrue = true;
+					break;
+				}
+			}
+			if (!isTrue) {
+				return -1;
+			}
+		}
 		return 0;
 	}
 
